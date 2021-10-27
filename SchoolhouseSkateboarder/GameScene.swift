@@ -8,6 +8,14 @@
 import SpriteKit
 import GameplayKit
 
+struct PhysicsCategory {
+    
+    // bit masks categorys for different physical bodies
+    static let skater: UInt32 = 0x1 << 0
+    static let brick: UInt32 = 0x1 << 1
+    static let gem: UInt32 = 0x1 << 2
+}
+
 class GameScene: SKScene {
     
     // skater sprite
@@ -17,6 +25,7 @@ class GameScene: SKScene {
     var brickSize = CGSize.zero
     // movement speed
     var scrollSpeed: CGFloat = 5.0
+    let startingScrollSpeed = 5.0
     
     // how fast sprites will fall down
     let gravitySpeed: CGFloat = 1.5
@@ -24,27 +33,33 @@ class GameScene: SKScene {
     var lastUpdateTime: TimeInterval?
     
     override func didMove(to view: SKView) {
+        // set gravity
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -6.0)
+        // default speed
+        physicsWorld.speed = 1.0
+        
+        // Accept contactDelegate protocol
+        physicsWorld.contactDelegate = self
+        
         // left bottom corner: 0, 0
         anchorPoint = CGPoint.zero
         
         // Create background sprite
         let background = SKSpriteNode(imageNamed: "background")
-
         let xMid = frame.midX
-        print(xMid)
         let yMid = frame.midY
-        print(yMid)
         background.position = CGPoint(x: xMid, y: yMid)
-        print(background.position)
         addChild(background)
-        resetSkater()
+        
+        skater.setupPhysicsBody()
         addChild(skater)
-        print(skater.position)
         
         // add gesture recognizer
         let tapMethod = #selector(GameScene.handleTap(tapGesture:))
         let tapGesture = UITapGestureRecognizer(target: self, action: tapMethod)
         view.addGestureRecognizer(tapGesture)
+        
+        startGame()
         }
     
     func resetSkater() {
@@ -54,6 +69,29 @@ class GameScene: SKScene {
         skater.position = CGPoint(x: skaterX, y: skaterY)
         skater.zPosition = 10
         skater.mimimumY = skaterY
+        
+        skater.zRotation = 0.0
+        skater.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
+        skater.physicsBody?.angularVelocity = 0.0
+        
+//        let ballbody = SKPhysicsBody(circleOfRadius: 30.0)
+//        let boxBody = SKPhysicsBody(rectangleOf: box.size)
+//        let textureBody = SKPhysicsBody(texture: skaterTexture, size: skater.size)
+    }
+    
+    func startGame() {
+        resetSkater()
+        scrollSpeed = startingScrollSpeed
+        lastUpdateTime = nil
+        
+        for brick in bricks {
+            brick.removeFromParent()
+        }
+        bricks.removeAll(keepingCapacity: true)
+    }
+    
+    func gameOver() {
+        startGame()
     }
     
     func spawnBrick(atPosition position: CGPoint) -> SKSpriteNode {
@@ -67,6 +105,13 @@ class GameScene: SKScene {
         // update brickSize with a real size of sidewalk.png
         brickSize = brick.size
         bricks.append(brick)
+        
+        // setup physics body
+        let center = brick.centerRect.origin
+        brick.physicsBody = SKPhysicsBody(rectangleOf: brick.size, center: center)
+        brick.physicsBody?.affectedByGravity = false
+        brick.physicsBody?.categoryBitMask = PhysicsCategory.brick
+        brick.physicsBody?.collisionBitMask = 0
         
         return brick
     }
@@ -142,13 +187,25 @@ class GameScene: SKScene {
         let currentScrollAmount = scrollSpeed * scrollAdjustment
         
         updateBricks(withScrollAmount: currentScrollAmount)
+        updateSkater()
     }
     
     @objc func handleTap(tapGesture: UITapGestureRecognizer) {
         if skater.isOnGround {
             // set skater.y velocity
-            skater.velocity = CGPoint(x: 0.0, y: skater.jumpSpeed)
-            skater.isOnGround = false
+            skater.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 260.0))
+        }
+    }
+    
+}
+
+//MARK: - SKPhysicsContactDelegate
+
+extension GameScene: SKPhysicsContactDelegate {
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        if contact.bodyA.categoryBitMask == PhysicsCategory.skater && contact.bodyB.categoryBitMask == PhysicsCategory.brick {
+            skater.isOnGround = true
         }
     }
     
