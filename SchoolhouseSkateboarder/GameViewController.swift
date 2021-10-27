@@ -22,8 +22,11 @@ class GameViewController: UIViewController {
                 
                 // set game scene size
                 let width = view.bounds.width
+                print(width)
                 let height = view.bounds.height
-                scene.size = CGSize(width: width, height: height)
+                print(height)
+                scene.size = CGSize(width: height, height: width)
+                print(scene.size)
                 
                 // Present the scene
                 view.presentScene(scene)
@@ -40,14 +43,14 @@ class GameViewController: UIViewController {
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+        return .landscapeLeft
     }
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    override var preferredInterfaceOrientationForPresentation: UIInterfaceOrientation{
+        return .landscapeLeft
     }
 }
