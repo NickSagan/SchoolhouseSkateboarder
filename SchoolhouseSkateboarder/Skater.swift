@@ -30,4 +30,23 @@ class Skater: SKSpriteNode {
         }
     }
     
+    func createSparks() {
+        // find emitter file
+        if let sparksPathUrl = Bundle.main.url(forResource: "sparks", withExtension: "sks") {
+            do {
+                let fileData = try Data(contentsOf: sparksPathUrl)
+                // create emitter node
+                let sparksNode = try NSKeyedUnarchiver.unarchivedObject(ofClass: SKEmitterNode.self, from: fileData)
+                sparksNode!.position = CGPoint(x: 0.0, y: -50.0)
+                addChild(sparksNode!)
+                let waitAction = SKAction.wait(forDuration: 0.5)
+                let removeAction = SKAction.removeFromParent()
+                let waitThenRemove = SKAction.sequence([waitAction, removeAction])
+                sparksNode?.run(waitThenRemove)
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
 }

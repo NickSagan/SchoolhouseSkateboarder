@@ -386,6 +386,12 @@ extension GameScene: SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.categoryBitMask == PhysicsCategory.skater && contact.bodyB.categoryBitMask == PhysicsCategory.brick {
+            if let velocityY = skater.physicsBody?.velocity.dy {
+                if !skater.isOnGround && velocityY < 100 {
+                    skater.createSparks()
+                    run(SKAction.playSoundFileNamed("down.wav", waitForCompletion: false))
+                }
+            }
             skater.isOnGround = true
         } else if contact.bodyA.categoryBitMask == PhysicsCategory.skater && contact.bodyB.categoryBitMask == PhysicsCategory.gem {
             if let gem = contact.bodyB.node as? SKSpriteNode {
