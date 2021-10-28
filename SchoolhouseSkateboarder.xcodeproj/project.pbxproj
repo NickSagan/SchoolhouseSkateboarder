@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		911EA63A272A7AC200987DAE /* sparks.sks in Resources */ = {isa = PBXBuildFile; fileRef = 911EA639272A7AC200987DAE /* sparks.sks */; };
 		9171E9C82729BC83000B69E3 /* death.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9171E9C32729BC81000B69E3 /* death.wav */; };
 		9171E9C92729BC83000B69E3 /* down.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9171E9C42729BC82000B69E3 /* down.wav */; };
 		9171E9CA2729BC83000B69E3 /* gem.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9171E9C52729BC82000B69E3 /* gem.wav */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		911EA639272A7AC200987DAE /* sparks.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sparks.sks; sourceTree = "<group>"; };
 		9171E9C32729BC81000B69E3 /* death.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = death.wav; sourceTree = "<group>"; };
 		9171E9C42729BC82000B69E3 /* down.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = down.wav; sourceTree = "<group>"; };
 		9171E9C52729BC82000B69E3 /* gem.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gem.wav; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				9171E9C52729BC82000B69E3 /* gem.wav */,
 				9171E9C62729BC82000B69E3 /* jump.wav */,
 				9171E9C72729BC83000B69E3 /* skateboard.wav */,
+				911EA639272A7AC200987DAE /* sparks.sks */,
 			);
 			path = SchoolhouseSkateboarder;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				911EA63A272A7AC200987DAE /* sparks.sks in Resources */,
 				9171E9CC2729BC83000B69E3 /* skateboard.wav in Resources */,
 				919CE7EC27293F1F009D242B /* Main.storyboard in Resources */,
 				9171E9C82729BC83000B69E3 /* death.wav in Resources */,
